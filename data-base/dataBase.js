@@ -1,6 +1,6 @@
 class DataBase{
     constructor(){
-        this.lobby = {lobby: 'spices'};
+        this.lobby;
 
         this.users = [
             {

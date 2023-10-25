@@ -46,7 +46,7 @@ app.post('/user',(req,res) => {
     session = req.session;
     session.userid=req.body.username;
     session.cards;
-    res.sendFile('views/lobby.html',{root:__dirname})
+    res.sendFile('views/main-menu.html',{root:__dirname})
   }
   else{
       res.send('Invalid username or password');
@@ -57,11 +57,10 @@ app.post('/user',(req,res) => {
 
 app.post('/action', (req,res) => {
   console.log(req.session.userid)
-  res.sendFile('views/lobby.html',{root:__dirname});
+  res.sendFile('views/main-menu.html',{root:__dirname});
 })
 
 app.post('/getLobby', (req, res) => {
-  console.log('getLobby');
   res.send(dataBase.getLobbies());
 })
 
