@@ -38,32 +38,31 @@ app.get('/',(req,res) => {
   }
 });
 
+//logins in user and checks if user exists
 app.post('/user',(req,res) => {
-  //logins in user and checks if user exists
   let username = req.body.username;
   let password = req.body.password;
   if(dataBase.ifUserExist(username, password)){
     session = req.session;
     session.userid=req.body.username;
     session.cards;
-    res.sendFile('views/homepage-logged-in.html',{root:__dirname})
+    res.sendFile('views/lobby.html',{root:__dirname})
   }
   else{
       res.send('Invalid username or password');
   }
 })
 
+//Post Requests
+
 app.post('/action', (req,res) => {
   console.log(req.session.userid)
-  res.sendFile('views/homepage-logged-in.html',{root:__dirname});
+  res.sendFile('views/lobby.html',{root:__dirname});
 })
 
-app.get('/sessions', (req, res) => {
-  req.sessionStore.sessionModel.findAll()
-    .then(sessions => sessions.map(sess => JSON.parse(sess.dataValues.data)))
-    .then((sessions) => {
-      res.send(sessions)
-    })
+app.post('/getLobby', (req, res) => {
+  console.log('getLobby');
+  res.send(dataBase.getLobbies());
 })
 
 app.listen(port, () => {

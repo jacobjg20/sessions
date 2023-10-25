@@ -1,5 +1,7 @@
 class DataBase{
     constructor(){
+        this.lobby = {lobby: 'spices'};
+
         this.users = [
             {
                 name: 'Jacob',
@@ -15,6 +17,10 @@ class DataBase{
 
     addUser(){
 
+    }
+
+    getLobbies(){
+        return JSON.stringify(this.lobby);
     }
 
     ifUserExist(userName, password){
