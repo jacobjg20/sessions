@@ -1,6 +1,9 @@
 class DataBase{
     constructor(){
-        this.lobby;
+        this.lobby = {
+            jammy: 'https://scaling-trout-54rq4pv55r7f4jxx-3000.app.github.dev/jammy',
+            dirtcup: 'https://scaling-trout-54rq4pv55r7f4jxx-3000.app.github.dev/dirtcup'
+        };
 
         this.users = [
             {
