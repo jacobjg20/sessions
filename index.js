@@ -17,9 +17,6 @@ app.use(express.static(__dirname));
 // cookie parser middleware
 app.use(cookieParser());
 
-// a variable to save a session
-var session;
-
 //create session
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
@@ -29,8 +26,10 @@ app.use(sessions({
     resave: false 
 }));
 
+//Get Requests
+
 app.get('/',(req,res) => {
-  session=req.session;
+  let session=req.session;
   if(session.userid){
       res.send("Welcome User <a href=\'/logout'>click to logout</a>");
   }else{
@@ -38,12 +37,17 @@ app.get('/',(req,res) => {
   }
 });
 
+app.get('/joinServer', (req, res) => {
+  console.log(req.session.userid);
+  res.end();
+})
+
 //logins in user and checks if user exists
 app.post('/user',(req,res) => {
   let username = req.body.username;
   let password = req.body.password;
   if(dataBase.ifUserExist(username, password)){
-    session = req.session;
+    let session = req.session;
     session.userid=req.body.username;
     session.cards;
     res.sendFile('views/main-menu.html',{root:__dirname})
@@ -64,6 +68,7 @@ app.post('/getLobby', (req, res) => {
   res.send(dataBase.getLobbies());
 })
 
+//node server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`);
 })

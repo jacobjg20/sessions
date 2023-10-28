@@ -18,11 +18,12 @@ function getLobbyInfo(){
     }); 
 }
 
+//creates join buttons
 function createLobbies(lobbies){  
     for (let key in lobbies) {
         if (lobbies.hasOwnProperty(key)) {
             let joinButton = document.createElement('button');
-            joinButton.textContent = 'Join';
+            joinButton.textContent = key;
             joinButton.onclick = function () {joinServer(lobbies[key])};
             document.body.appendChild(joinButton);
             lobbyName = lobbies[key];
@@ -31,5 +32,6 @@ function createLobbies(lobbies){
 }
 
 function joinServer(url){
-    console.log(url);
+    fetch("https://scaling-trout-54rq4pv55r7f4jxx-3000.app.github.dev/joinServer", 
+    {method: 'GET'});
 }
