@@ -1,0 +1,1 @@
+// Get data for Current table, meaning it can be data for server Jammy or Dirtcup
