@@ -23,7 +23,7 @@ app.use(sessions({
     secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
     saveUninitialized:true,
     cookie: { maxAge: oneDay },
-    resave: false 
+    resave: false
 }));
 
 //Get Requests
@@ -81,5 +81,5 @@ app.post('/joinServerDirtcup', (req, res) => {
 
 //node server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Example app listening on port ${port}` + __dirname);
 })
