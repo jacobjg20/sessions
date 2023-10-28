@@ -61,8 +61,8 @@ app.post('/action', (req,res) => {
   res.sendFile('views/main-menu.html',{root:__dirname});
 })
 
-app.post('/getLobby', (req, res) => {
-  res.send(dataBase.getLobbies());
+app.post('/getTables', (req, res) => {
+  res.send(dataBase.getTables());
 })
 
 //Server Routes

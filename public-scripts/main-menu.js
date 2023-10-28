@@ -2,13 +2,13 @@ var lobbies;
 
 function refreshLobby(){
     //fetches lobby info
-    getLobbyInfo();
+    getTables();
     createLobbies(lobbies);
 
 }
 
-function getLobbyInfo(){
-    fetch("https://scaling-trout-54rq4pv55r7f4jxx-3000.app.github.dev/getLobby", 
+function getTables(){
+    fetch("https://scaling-trout-54rq4pv55r7f4jxx-3000.app.github.dev/getTables", 
     {method: 'POST'})
     .then(data => {
         return data.json()
