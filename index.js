@@ -37,10 +37,6 @@ app.get('/',(req,res) => {
   }
 });
 
-app.get('/joinServer', (req, res) => {
-  console.log(req.session.userid);
-  res.end();
-})
 
 //logins in user and checks if user exists
 app.post('/user',(req,res) => {
@@ -60,12 +56,27 @@ app.post('/user',(req,res) => {
 //Post Requests
 
 app.post('/action', (req,res) => {
-  console.log(req.session.userid)
+  console.log(req.session.server);
+
   res.sendFile('views/main-menu.html',{root:__dirname});
 })
 
 app.post('/getLobby', (req, res) => {
   res.send(dataBase.getLobbies());
+})
+
+//Server Routes
+
+app.post('/joinServerJammy', (req, res) => {
+  let session = req.session;
+  session.server = 'Jammy'
+  res.sendFile('views/table.html', {root:__dirname});
+})
+
+app.post('/joinServerDirtcup', (req, res) => {
+  let session = req.session;
+  session.server = 'Dirtcup';
+  res.sendFile('views/table.html', {root:__dirname});
 })
 
 //node server
