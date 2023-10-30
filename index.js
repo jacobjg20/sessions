@@ -6,6 +6,9 @@ const app = express();
 const port = 3000;
 const DataBase = require('./data-base/dataBase.js');
 const dataBase = new DataBase();
+const Table = new require('./data-base/table.js');
+tableJammy = new Table('Jammy');
+tableDirtCup = new Table('DirtCup');
 
 // parsing the incoming data
 app.use(express.json());
@@ -27,7 +30,6 @@ app.use(sessions({
 }));
 
 //Get Requests
-
 app.get('/',(req,res) => {
   let session=req.session;
   if(session.userid){
@@ -37,15 +39,34 @@ app.get('/',(req,res) => {
   }
 });
 
+//joins server, adds userid, adds session
+app.get('/jammy', (req, res) =>{
+  let session=req.session;
+  let userid=req.session.userid;
 
-//logins in user and checks if user exists
-app.post('/user',(req,res) => {
+  session.server = "jammy";
+  tableJammy.addPlayer(userid);
+  res.sendFile('views/table.html', {root:__dirname});
+})
+
+//joins server, adds userid, adds session
+app.get('/dirtCup', (req, res) =>{
+  let session=req.session;
+  let userid=req.session.userid;
+
+  session.server = "dirtCup";
+  tableJammy.addPlayer(userid);
+  res.sendFile('views/table.html', {root:__dirname});
+})
+
+//Post Requests From Main menu
+app.post('/main-menu',(req,res) => {
   let username = req.body.username;
   let password = req.body.password;
+
   if(dataBase.ifUserExist(username, password)){
     let session = req.session;
     session.userid=req.body.username;
-    session.cards;
     res.sendFile('views/main-menu.html',{root:__dirname})
   }
   else{
@@ -53,30 +74,17 @@ app.post('/user',(req,res) => {
   }
 })
 
-//Post Requests
+//POST REQUEST FOR TABLES
+app.post('/getCurrentTableState', (req, res) =>{
+  let server = req.session.server;
 
-app.post('/action', (req,res) => {
-  console.log(req.session.server);
-
-  res.sendFile('views/main-menu.html',{root:__dirname});
-})
-
-app.post('/getTables', (req, res) => {
-  res.send(dataBase.getTables());
-})
-
-//Server Routes
-
-app.post('/joinServerJammy', (req, res) => {
-  let session = req.session;
-  session.server = 'Jammy'
-  res.sendFile('views/table.html', {root:__dirname});
-})
-
-app.post('/joinServerDirtcup', (req, res) => {
-  let session = req.session;
-  session.server = 'Dirtcup';
-  res.sendFile('views/table.html', {root:__dirname});
+  if(server == 'dirtCup'){
+    console.log(tableDirtCup.getCurrentTableState());
+  }
+  else if(server == 'jammy'){
+    console.log(tableJammy.getCurrentTableState());
+  }
+  res.end();
 })
 
 //node server

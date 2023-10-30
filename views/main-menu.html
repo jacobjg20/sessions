@@ -7,23 +7,28 @@
   <title>Hello, world!</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="" />
-  <script src="/public-scripts/main-menu.js"></script>
   <link rel="icon" href="favicon.png">
 </head>
 <body>
-  <h1>Welcome to the main menu</h1>
-    <form action="/action" method="post">
-        <button name="foo" value="upvote">action</button>
-    </form>
+  <h1>Main Menu</h1>
+  <h3>Lobbies</h3>
     <div id="lobby">
-
     </div>
+    <form action='/jammy'>
+        <button>
+          Jammy
+        </button>
+    </form>
 
-    <button onclick="refreshLobby()">Refresh</button>
+    <form action = '/dirtCup'>
+        <button>
+          Dirtcup
+        </button>
+    </form>
     <br>
 
     Hey there, welcome <a href=\'/logout'>click to logout</a>
 
-  
 </body>
+<script src="/public-scripts/main-menu.js"></script>
 </html>
