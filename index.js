@@ -55,7 +55,7 @@ app.get('/dirtCup', (req, res) =>{
   let userid=req.session.userid;
 
   session.server = "dirtCup";
-  tableJammy.addPlayer(userid);
+  tableDirtCup.addPlayer(userid);
   res.sendFile('views/table.html', {root:__dirname});
 })
 
@@ -72,6 +72,7 @@ app.post('/main-menu',(req,res) => {
   else{
       res.send('Invalid username or password');
   }
+
 })
 
 //POST REQUEST FOR TABLES
@@ -80,23 +81,28 @@ app.post('/shuffleCards', (req, res) => {
 
   if(server == 'dirtCup'){
     tableDirtCup.shuffleCards();
-    console.log(tableDirtCup.getCurrentTableState());
+    tableDirtCup.assignHands();
+    res.end();
   }
   else if(server == 'jammy'){
     tableJammy.shuffleCards();
-    console.log(tableJammy.getCurrentTableState());
+    tableJammy.assignHands();
+    res.end();
   }
+
+  res.end();
 })
 
 app.post('/getCurrentTableState', (req, res) =>{
   let server = req.session.server;
-
+  let userid = req.session.userid;
   if(server == 'dirtCup'){
-    res.send(tableDirtCup.getCurrentTableState());
+    res.send(tableDirtCup.getCurrentTableState(userid));
   }
   else if(server == 'jammy'){
-    res.send(tableJammy.getCurrentTableState());
+    res.send(tableJammy.getCurrentTableState(userid));
   }
+
   res.end();
 })
 

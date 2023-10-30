@@ -2,6 +2,7 @@
 var communityCards;
 var tableName;
 var players;
+var hand;
 
 function getCurrentTableState(){
   fetch("/getCurrentTableState", {
@@ -9,14 +10,18 @@ function getCurrentTableState(){
       })
       .then((response) => { return response.json() })
       .then((response) => {
-        communityCards = response.deck;
+        communityCards = response.communityCards;
+        tableName = response.tableName;
+        players = JSON.stringify(response.players);
+        hand = JSON.stringify(response.hand);
       });
 
       displayGameState();
 }
 
 function displayGameState(){
-  
+  document.getElementById('board').innerHTML = '';
+  document.getElementById('board').innerHTML += communityCards + "<br>" + tableName + "<br>" + players + "<br>" + hand;
 }
 
 function shuffleCards(){
