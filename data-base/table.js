@@ -25,7 +25,7 @@ class Table{
 
     getCurrentTableState(userid){
       let hand = this.playersHands.find(item => item.userid === userid);
-      console.log(this.playersHands);
+      console.log(this.playersHands); //REMOVE LATER
       return {
         communityCards: null,
         tableName: this.tableName,
