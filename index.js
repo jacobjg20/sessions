@@ -92,10 +92,10 @@ app.post('/getCurrentTableState', (req, res) =>{
   let server = req.session.server;
 
   if(server == 'dirtCup'){
-    console.log(tableDirtCup.getCurrentTableState());
+    res.send(tableDirtCup.getCurrentTableState());
   }
   else if(server == 'jammy'){
-    console.log(tableJammy.getCurrentTableState());
+    res.send(tableJammy.getCurrentTableState());
   }
   res.end();
 })
