@@ -75,6 +75,19 @@ app.post('/main-menu',(req,res) => {
 })
 
 //POST REQUEST FOR TABLES
+app.post('/shuffleCards', (req, res) => {
+  let server = req.session.server;
+
+  if(server == 'dirtCup'){
+    tableDirtCup.shuffleCards();
+    console.log(tableDirtCup.getCurrentTableState());
+  }
+  else if(server == 'jammy'){
+    tableJammy.shuffleCards();
+    console.log(tableJammy.getCurrentTableState());
+  }
+})
+
 app.post('/getCurrentTableState', (req, res) =>{
   let server = req.session.server;
 
