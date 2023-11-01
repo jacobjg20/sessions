@@ -4,12 +4,14 @@ class DataBase{
         this.users = [
             {
                 name: 'Jacob',
-                password: 'a'
+                password: 'a',
+                isChecked: false
             },
 
             {
                 name: 'Kathryn',
-                password: 'mypassword'
+                password: 'mypassword',
+                isChecked: false
             }
         ]
     }
