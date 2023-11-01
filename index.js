@@ -6,6 +6,9 @@ const app = express();
 const port = 3000;
 const DataBase = require('./data-base/dataBase.js');
 const dataBase = new DataBase();
+const Table = new require('./data-base/table.js');
+tableJammy = new Table('Jammy');
+tableDirtCup = new Table('DirtCup');
 
 // parsing the incoming data
 app.use(express.json());
@@ -17,20 +20,18 @@ app.use(express.static(__dirname));
 // cookie parser middleware
 app.use(cookieParser());
 
-// a variable to save a session
-var session;
-
 //create session
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
     saveUninitialized:true,
     cookie: { maxAge: oneDay },
-    resave: false 
+    resave: false
 }));
 
+//Get Requests
 app.get('/',(req,res) => {
-  session=req.session;
+  let session=req.session;
   if(session.userid){
       res.send("Welcome User <a href=\'/logout'>click to logout</a>");
   }else{
@@ -38,34 +39,74 @@ app.get('/',(req,res) => {
   }
 });
 
-app.post('/user',(req,res) => {
-  //logins in user and checks if user exists
+//joins server, adds userid, adds session
+app.get('/jammy', (req, res) =>{
+  let session=req.session;
+  let userid=req.session.userid;
+
+  session.server = "jammy";
+  tableJammy.addPlayer(userid);
+  res.sendFile('views/table.html', {root:__dirname});
+})
+
+//joins server, adds userid, adds session
+app.get('/dirtCup', (req, res) =>{
+  let session=req.session;
+  let userid=req.session.userid;
+
+  session.server = "dirtCup";
+  tableDirtCup.addPlayer(userid);
+  res.sendFile('views/table.html', {root:__dirname});
+})
+
+//Post Requests From Main menu
+app.post('/main-menu',(req,res) => {
   let username = req.body.username;
   let password = req.body.password;
+
   if(dataBase.ifUserExist(username, password)){
-    session = req.session;
+    let session = req.session;
     session.userid=req.body.username;
-    session.cards;
-    res.sendFile('views/homepage-logged-in.html',{root:__dirname})
+    res.sendFile('views/main-menu.html',{root:__dirname})
   }
   else{
       res.send('Invalid username or password');
   }
+
 })
 
-app.post('/action', (req,res) => {
-  console.log(req.session.userid)
-  res.sendFile('views/homepage-logged-in.html',{root:__dirname});
+//POST REQUEST FOR TABLES
+app.post('/shuffleCards', (req, res) => {
+  let server = req.session.server;
+
+  if(server == 'dirtCup'){
+    tableDirtCup.shuffleCards();
+    tableDirtCup.assignHands();
+    res.end();
+  }
+  else if(server == 'jammy'){
+    tableJammy.shuffleCards();
+    tableJammy.assignHands();
+    res.end();
+  }
+
+  res.end();
 })
 
-app.get('/sessions', (req, res) => {
-  req.sessionStore.sessionModel.findAll()
-    .then(sessions => sessions.map(sess => JSON.parse(sess.dataValues.data)))
-    .then((sessions) => {
-      res.send(sessions)
-    })
+app.post('/getCurrentTableState', (req, res) =>{
+  let server = req.session.server;
+  let userid = req.session.userid;
+  if(server == 'dirtCup'){
+    res.send(tableDirtCup.getCurrentTableState(userid));
+  }
+  else if(server == 'jammy'){
+    res.send(tableJammy.getCurrentTableState(userid));
+  }
+
+  res.end();
 })
 
+//node server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}` + __dirname);
 })
