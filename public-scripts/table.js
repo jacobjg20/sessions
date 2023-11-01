@@ -14,9 +14,8 @@ function getCurrentTableState(){
         tableName = response.tableName;
         players = JSON.stringify(response.players);
         hand = JSON.stringify(response.hand);
-      });
-
-      displayGameState();
+      })
+      .then(displayGameState());
 }
 
 function displayGameState(){

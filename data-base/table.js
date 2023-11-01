@@ -1,4 +1,4 @@
-const Deck = require('./Deck.js');
+const Deck = require('./deck.js');
 const deck = new Deck();
 
 function useridExist(userid , players){
