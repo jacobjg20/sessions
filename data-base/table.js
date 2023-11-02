@@ -1,4 +1,4 @@
-const Deck = require('./Deck.js');
+const Deck = require('./deck.js');
 const deck = new Deck();
 
 function useridExist(userid , players){
@@ -18,13 +18,12 @@ class Table{
     constructor(tableName){
       this.tableName = tableName;
       this.players = [];
-      this.playersHands = [];
       this.cards = deck.getCards();
       this.communityCards = [];
     }
 
     getCurrentTableState(userid){
-      let hand = this.playersHands.find(item => item.userid === userid);
+      let hand = this.players.find(item => item.userid === userid);
       console.log(this.playersHands); //REMOVE LATER
       return {
         communityCards: null,
@@ -35,8 +34,14 @@ class Table{
     }
 
     addPlayer(userid){
+      let userInfo = {
+        userid: userid,
+        hand: null,
+        chips: 0
+      }
+
       if(!useridExist(userid,this.players)){
-        this.players.push(userid);
+        this.players.push(userInfo);
       } else{
         console.log('player already in lobby'); // REMOVE LATER
       }
@@ -44,16 +49,11 @@ class Table{
 
     assignHands(){
       let currentCard = 0;
-      this.playersHands = [];
 
       for(let i = 0; i < this.players.length; i++){
-        let playerHand = {
-          userid: this.players[i],
-          firstCard: this.cards[currentCard],
-          secondCard: this.cards[++currentCard]
-        }
 
-        this.playersHands.push(playerHand);
+        this.players[i].firstCard =  this.cards[currentCard];
+        this.players[i].secondCard = this.cards[++currentCard];
         currentCard += 2;
       }
     }

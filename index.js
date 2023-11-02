@@ -70,7 +70,7 @@ app.post('/main-menu',(req,res) => {
     res.sendFile('views/main-menu.html',{root:__dirname})
   }
   else{
-      res.send('Invalid username or password');
+    res.send('Invalid username or password');
   }
 
 })
