@@ -3,6 +3,7 @@ var communityCards;
 var tableName;
 var players;
 var hand;
+var chips;
 
 function getCurrentTableState(){
   fetch("/getCurrentTableState", {
@@ -14,17 +15,18 @@ function getCurrentTableState(){
         tableName = response.tableName;
         players = JSON.stringify(response.players);
         hand = JSON.stringify(response.hand);
+        chips = response.chips;
       })
       .then(displayGameState());
 }
 
 function displayGameState(){
   document.getElementById('board').innerHTML = '';
-  document.getElementById('board').innerHTML += communityCards + "<br>" + tableName + "<br>" + players + "<br>" + hand;
+  document.getElementById('board').innerHTML += communityCards + "<br>" + tableName + "<br>" + players + "<br>" + hand + "<br>" + chips;
 }
 
 function shuffleCards(){
-  fetch("/shuffleCards", {
+  fetch("/startRound", {
         method: "POST",
       });
 }

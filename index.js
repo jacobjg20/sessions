@@ -76,15 +76,17 @@ app.post('/main-menu',(req,res) => {
 })
 
 //POST REQUEST FOR TABLES
-app.post('/shuffleCards', (req, res) => {
+app.post('/startRound', (req, res) => {
   let server = req.session.server;
 
   if(server == 'dirtCup'){
+    tableDirtCup.startRound();
     tableDirtCup.shuffleCards();
     tableDirtCup.assignHands();
     res.end();
   }
   else if(server == 'jammy'){
+    tableJammy.startRound();
     tableJammy.shuffleCards();
     tableJammy.assignHands();
     res.end();
