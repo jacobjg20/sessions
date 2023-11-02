@@ -14,6 +14,12 @@ function useridExist(userid , players){
   return false;
 }
 
+function playerData(players){
+  let player = players.find(item => item.userid === userid);
+
+  return player;
+}
+
 class Table{
     constructor(tableName){
       this.tableName = tableName;
@@ -28,8 +34,9 @@ class Table{
     }
 
     startRound(){
-      this.rounds = this.players.length;
+      this.resetHands();
       this.currentPlayer = this.players[this.turn].userid;
+      console.log('It is ' + this.currentPlayer + " turn.")
     }
 
     getCurrentTableState(userid){
@@ -38,7 +45,7 @@ class Table{
       return {
         communityCards: null,
         tableName: this.tableName,
-        players: this.players,
+        players: this.playerUsernames(),
         hand: player.hand,
         chips: player.chips
       };
@@ -70,6 +77,12 @@ class Table{
       }
     }
 
+    resetHands(){
+      for(let i = 0; i < this.players.length; i++){
+        this.players[i].hand = [];
+      }
+    }
+
     shuffleCards(){
       let cardsCount = this.cards.length;
 
@@ -81,6 +94,7 @@ class Table{
         }
     }
 
+    //Current players
     isCurrentPlayer(userid){
       if(userid == this.currentPlayer){
         return true;
@@ -89,11 +103,37 @@ class Table{
       }
     }
 
+    playerUsernames(){
+      let players = [];
 
+      for(let i = 0; i < this.players.length; i++){
+        players.push(this.players[i].userid);
+      }
+
+      return players;
+    }
     //player actions
-    check(){}
-    raise(){}
-    fold(){}
+    check(userid){
+      if(userid == currentPlayer){
+        this.turn++;
+        this.currentPlayer = this.players[turn].userid;
+        console.log(currentPlayer);
+      }else {
+        console.log('user is acting out of turn');
+      }
+    }
+
+    raise(userid){
+
+    }
+
+    fold(userid){
+      if(userid == currentPlayer){
+
+      }else{
+        console.log('user is acting out of turn');
+      }
+    }
 
 }
 

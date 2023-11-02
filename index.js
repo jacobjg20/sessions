@@ -93,7 +93,17 @@ app.post('/startRound', (req, res) => {
   }
 
   res.end();
-})
+});
+
+app.post('/check', (req, res) =>{
+  let server = req.session.server;
+  let userid = req.session.userid;
+  if(server == 'dirtCup'){
+    tableDirtCup.check();
+  } else if(server == 'jammy'){
+    tableJammy.check();
+  }
+});
 
 app.post('/getCurrentTableState', (req, res) =>{
   let server = req.session.server;
@@ -106,7 +116,7 @@ app.post('/getCurrentTableState', (req, res) =>{
   }
 
   res.end();
-})
+});
 
 //node server
 app.listen(port, () => {

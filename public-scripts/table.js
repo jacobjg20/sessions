@@ -22,10 +22,10 @@ function getCurrentTableState(){
 
 function displayGameState(){
   document.getElementById('board').innerHTML = '';
-  document.getElementById('board').innerHTML += communityCards + "<br>" + tableName + "<br>" + players + "<br>" + hand + "<br>" + chips;
+  document.getElementById('board').innerHTML += communityCards + "<br>" + tableName + "<br>" + players + "<br>" + hand + "<br> Chips:" + chips;
 }
 
-function shuffleCards(){
+function startRound(){
   fetch("/startRound", {
         method: "POST",
       });
