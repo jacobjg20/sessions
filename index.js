@@ -81,14 +81,11 @@ app.post('/startRound', (req, res) => {
 
   if(server == 'dirtCup'){
     tableDirtCup.startRound();
-    tableDirtCup.shuffleCards();
-    tableDirtCup.assignHands();
     res.end();
   }
+
   else if(server == 'jammy'){
     tableJammy.startRound();
-    tableJammy.shuffleCards();
-    tableJammy.assignHands();
     res.end();
   }
 
@@ -98,19 +95,25 @@ app.post('/startRound', (req, res) => {
 app.post('/check', (req, res) =>{
   let server = req.session.server;
   let userid = req.session.userid;
+
   if(server == 'dirtCup'){
-    tableDirtCup.check();
-  } else if(server == 'jammy'){
-    tableJammy.check();
+    tableDirtCup.check(userid);
   }
+
+  else if(server == 'jammy'){
+    tableJammy.check(userid);
+  }
+
 });
 
 app.post('/getCurrentTableState', (req, res) =>{
   let server = req.session.server;
   let userid = req.session.userid;
+
   if(server == 'dirtCup'){
     res.send(tableDirtCup.getCurrentTableState(userid));
   }
+
   else if(server == 'jammy'){
     res.send(tableJammy.getCurrentTableState(userid));
   }

@@ -14,29 +14,32 @@ function useridExist(userid , players){
   return false;
 }
 
-function playerData(players){
-  let player = players.find(item => item.userid === userid);
-
-  return player;
-}
-
 class Table{
     constructor(tableName){
       this.tableName = tableName;
       this.players = [];
-      this.cards = deck.getCards();
-      this.communityCards = [];
 
+      this.cards = deck.getCards();
+      this.currentCard;
+      this.communityCards = [];
 
       this.round = 0;
       this.turn = 0;
       this.currentPlayer;
+      this.gameInProgress = false;
     }
 
     startRound(){
-      this.resetHands();
-      this.currentPlayer = this.players[this.turn].userid;
-      console.log('It is ' + this.currentPlayer + " turn.")
+      if(!(this.gameInProgress)){
+        this.resetHands();
+        this.currentPlayer = this.players[this.turn].userid;
+        this.shuffleCards();
+        this.assignHands();
+        this.gameInProgress = true;
+        console.log('It is ' + this.currentPlayer + " turn.")
+      }
+
+      else if(this.gameInProgress){ console.log('Cannot start round, game in progress.') };
     }
 
     getCurrentTableState(userid){
@@ -47,33 +50,18 @@ class Table{
         tableName: this.tableName,
         players: this.playerUsernames(),
         hand: player.hand,
-        chips: player.chips
+        chips: player.chips,
+        communityCards: this.communityCards
       };
     }
 
-    addPlayer(userid){
-      let userInfo = {
-        userid: userid,
-        hand: [],
-        chips: 100,
-        isTurn: false
-      }
-
-      if(!useridExist(userid,this.players)){
-        this.players.push(userInfo);
-      } else{
-        console.log('player already in lobby'); // REMOVE LATER
-      }
-    }
-
     assignHands(){
-      let currentCard = 0;
+      this.currentCard = 0;
 
       for(let i = 0; i < this.players.length; i++){
-
-        this.players[i].hand.push(this.cards[currentCard]);
-        this.players[i].hand.push(this.cards[++currentCard]);
-        currentCard += 2;
+        this.players[i].hand.push(this.cards[this.currentCard]);
+        this.players[i].hand.push(this.cards[++this.currentCard]);
+        this.currentCard += 2;
       }
     }
 
@@ -86,15 +74,45 @@ class Table{
     shuffleCards(){
       let cardsCount = this.cards.length;
 
-        for (var i = cardsCount - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = this.cards[i];
-            this.cards[i] = this.cards[j];
-            this.cards[j] = temp;
-        }
+      for (var i = cardsCount - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = this.cards[i];
+          this.cards[i] = this.cards[j];
+          this.cards[j] = temp;
+      }
+    }
+
+    addCommunityCards(){
+      if(this.round == 0){
+        this.communityCards.push(this.cards[this.currentCard]);
+        this.communityCards.push(this.cards[1 + this.currentCard]);
+        this.communityCards.push(this.cards[2 + this.currentCard]);
+        this.currentCard += 3;
+      } else if(this.round == 1){
+        this.communityCards.push(this.cards[this.currentCard]);
+        this.currentCard++;
+      } else if(this.round == 2){
+        this.communityCards.push(this.cards[this.currentCard]);
+      }
+
     }
 
     //Current players
+    addPlayer(userid){
+      let userInfo = {
+        userid: userid,
+        hand: [],
+        chips: 100,
+        isFold: false
+      }
+
+      if(!useridExist(userid,this.players)){
+        this.players.push(userInfo);
+      } else{
+        console.log('player already in lobby'); // REMOVE LATER
+      }
+    }
+
     isCurrentPlayer(userid){
       if(userid == this.currentPlayer){
         return true;
@@ -112,19 +130,23 @@ class Table{
 
       return players;
     }
+
     //player actions
     check(userid){
-      if(userid == currentPlayer){
+      if(userid == this.currentPlayer){
         this.turn++;
-        this.currentPlayer = this.players[turn].userid;
-        console.log(currentPlayer);
-      }else {
+        console.log(this.turn);
+        this.isRoundEnd();
+        this.currentPlayer = this.players[this.turn].userid;
+      } else {
         console.log('user is acting out of turn');
       }
+
+      this.gameInfo(); //TO BE REMOVED
     }
 
     raise(userid){
-
+      this.gameInfo(); //TO BE REMOVED
     }
 
     fold(userid){
@@ -133,6 +155,25 @@ class Table{
       }else{
         console.log('user is acting out of turn');
       }
+
+      this.gameInfo(); //TO BE REMOVED
+    }
+
+    isRoundEnd(){
+      let player = this.players.length;
+
+      if(this.turn == player){
+        this.turn = 0;
+        this.addCommunityCards();
+        this.round++;
+        return;
+      }
+    }
+
+    //Tester functions
+    gameInfo(){
+      // console.log(JSON.stringify(this.players) + ' ' + this.round+ ' ' + this.currentPlayer + ' ');
+      console.log(this.round + this.communityCards);
     }
 
 }

@@ -1,5 +1,5 @@
 // Get data for Current table, meaning it can be data for server Jammy or Dirtcup
-var communityCards;
+var communityCards = 'community cards';
 var tableName;
 var players;
 var hand;
@@ -11,7 +11,7 @@ function getCurrentTableState(){
       })
       .then((response) => { return response.json() })
       .then((response) => {
-        communityCards = response.communityCards;
+        communityCards = JSON.stringify(response.communityCards);
         tableName = response.tableName;
         players = JSON.stringify(response.players);
         hand = JSON.stringify(response.hand);
@@ -27,6 +27,12 @@ function displayGameState(){
 
 function startRound(){
   fetch("/startRound", {
+        method: "POST",
+      });
+}
+
+function check(){
+  fetch("/check", {
         method: "POST",
       });
 }
