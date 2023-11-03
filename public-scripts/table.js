@@ -5,6 +5,12 @@ var players;
 var hand;
 var chips;
 
+setInterval(gameState, 1000);
+
+function gameState() {
+  getCurrentTableState();
+}
+
 function getCurrentTableState(){
   fetch("/getCurrentTableState", {
         method: "POST",
@@ -22,7 +28,7 @@ function getCurrentTableState(){
 
 function displayGameState(){
   document.getElementById('board').innerHTML = '';
-  document.getElementById('board').innerHTML += communityCards + "<br>" + tableName + "<br>" + players + "<br>" + hand + "<br> Chips:" + chips;
+  document.getElementById('board').innerHTML += communityCards + "<br>" + tableName + "<br>" + players +"<br>" + hand + "<br> Chips:" + chips;
 }
 
 function startRound(){
@@ -33,6 +39,12 @@ function startRound(){
 
 function check(){
   fetch("/check", {
+        method: "POST",
+      });
+}
+
+function fold(){
+  fetch("/fold", {
         method: "POST",
       });
 }

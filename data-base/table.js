@@ -23,19 +23,22 @@ class Table{
       this.currentCard;
       this.communityCards = [];
 
+      this.pot = 0;
       this.round = 0;
       this.turn = 0;
       this.currentPlayer;
+      this.currentPlayers;
       this.gameInProgress = false;
     }
 
     startRound(){
       if(!(this.gameInProgress)){
         this.resetHands();
-        this.currentPlayer = this.players[this.turn].userid;
         this.shuffleCards();
         this.assignHands();
         this.gameInProgress = true;
+        this.currentPlayers = this.playerUsernames();
+        this.currentPlayer = this.currentPlayers[this.turn];
         console.log('It is ' + this.currentPlayer + " turn.")
       }
 
@@ -49,6 +52,7 @@ class Table{
         communityCards: null,
         tableName: this.tableName,
         players: this.playerUsernames(),
+        currentPlayers: this.currentPlayers,
         hand: player.hand,
         chips: player.chips,
         communityCards: this.communityCards
@@ -94,7 +98,6 @@ class Table{
       } else if(this.round == 2){
         this.communityCards.push(this.cards[this.currentCard]);
       }
-
     }
 
     //Current players
@@ -131,14 +134,23 @@ class Table{
       return players;
     }
 
+    findUsernameIndex(userid){
+      let index = this.currentPlayers.indexOf(userid);
+
+      if (index !== -1) {
+          this.currentPlayers.splice(index, 1);
+      }
+    }
+
+
     //player actions
     check(userid){
       if(userid == this.currentPlayer){
         this.turn++;
-        console.log(this.turn);
         this.isRoundEnd();
-        this.currentPlayer = this.players[this.turn].userid;
+        this.currentPlayer = this.currentPlayers[this.turn];
       } else {
+        
         console.log('user is acting out of turn');
       }
 
@@ -150,19 +162,17 @@ class Table{
     }
 
     fold(userid){
-      if(userid == currentPlayer){
-
-      }else{
-        console.log('user is acting out of turn');
+      let index = this.currentPlayers.indexOf(userid);
+      if(this.currentPlayers.length == 1) { this.currentPlayers[0] + " has won! " }
+      if (index !== -1) {
+          this.currentPlayers.splice(index, 1);
       }
-
-      this.gameInfo(); //TO BE REMOVED
     }
 
     isRoundEnd(){
-      let player = this.players.length;
-
-      if(this.turn == player){
+      let players = this.currentPlayers.length;
+      console.log(JSON.stringify(this.currentPlayers))
+      if(this.turn == players){
         this.turn = 0;
         this.addCommunityCards();
         this.round++;

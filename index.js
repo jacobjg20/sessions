@@ -103,7 +103,19 @@ app.post('/check', (req, res) =>{
   else if(server == 'jammy'){
     tableJammy.check(userid);
   }
+});
 
+app.post('/fold', (req, res) =>{
+  let server = req.session.server;
+  let userid = req.session.userid;
+
+  if(server == 'dirtCup'){
+    tableDirtCup.fold(userid);
+  }
+
+  else if(server == 'jammy'){
+    tableJammy.fold(userid);
+  }
 });
 
 app.post('/getCurrentTableState', (req, res) =>{
