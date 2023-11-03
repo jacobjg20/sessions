@@ -33,7 +33,6 @@ class Table{
 
     startRound(){
       if(!(this.gameInProgress)){
-        this.resetHands();
         this.shuffleCards();
         this.assignHands();
         this.gameInProgress = true;
@@ -73,6 +72,18 @@ class Table{
       for(let i = 0; i < this.players.length; i++){
         this.players[i].hand = [];
       }
+    }
+
+    resetTableVariables(){
+      this.pot = 0;
+      this.round = 0;
+      this.turn = 0;
+      this.currentPlayer;
+      this.currentPlayers;
+      this.gameInProgress = false;
+      this.communityCards =[];
+      this.currentCard;
+      this.resetHands();
     }
 
     shuffleCards(){
@@ -142,6 +153,12 @@ class Table{
       }
     }
 
+    removeCurrentPlayer(userid){
+      let index = this.currentPlayers.indexOf(userid);
+      if (index !== -1) {
+        this.currentPlayers.splice(index, 1);
+      }
+    }
 
     //player actions
     check(userid){
@@ -150,7 +167,7 @@ class Table{
         this.isRoundEnd();
         this.currentPlayer = this.currentPlayers[this.turn];
       } else {
-        
+
         console.log('user is acting out of turn');
       }
 
@@ -162,10 +179,11 @@ class Table{
     }
 
     fold(userid){
-      let index = this.currentPlayers.indexOf(userid);
-      if(this.currentPlayers.length == 1) { this.currentPlayers[0] + " has won! " }
-      if (index !== -1) {
-          this.currentPlayers.splice(index, 1);
+      this.removeCurrentPlayer(userid);
+
+      if(this.currentPlayers.length == 1){
+        console.log('Round end ' + this.currentPlayers + " has won.");
+        this.resetTableVariables();
       }
     }
 
