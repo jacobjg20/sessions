@@ -76,35 +76,62 @@ app.post('/main-menu',(req,res) => {
 })
 
 //POST REQUEST FOR TABLES
-app.post('/shuffleCards', (req, res) => {
+app.post('/startRound', (req, res) => {
   let server = req.session.server;
 
   if(server == 'dirtCup'){
-    tableDirtCup.shuffleCards();
-    tableDirtCup.assignHands();
+    tableDirtCup.startRound();
     res.end();
   }
+
   else if(server == 'jammy'){
-    tableJammy.shuffleCards();
-    tableJammy.assignHands();
+    tableJammy.startRound();
     res.end();
   }
 
   res.end();
-})
+});
+
+app.post('/check', (req, res) =>{
+  let server = req.session.server;
+  let userid = req.session.userid;
+
+  if(server == 'dirtCup'){
+    tableDirtCup.check(userid);
+  }
+
+  else if(server == 'jammy'){
+    tableJammy.check(userid);
+  }
+});
+
+app.post('/fold', (req, res) =>{
+  let server = req.session.server;
+  let userid = req.session.userid;
+
+  if(server == 'dirtCup'){
+    tableDirtCup.fold(userid);
+  }
+
+  else if(server == 'jammy'){
+    tableJammy.fold(userid);
+  }
+});
 
 app.post('/getCurrentTableState', (req, res) =>{
   let server = req.session.server;
   let userid = req.session.userid;
+
   if(server == 'dirtCup'){
     res.send(tableDirtCup.getCurrentTableState(userid));
   }
+
   else if(server == 'jammy'){
     res.send(tableJammy.getCurrentTableState(userid));
   }
 
   res.end();
-})
+});
 
 //node server
 app.listen(port, () => {
