@@ -23,6 +23,7 @@ class Table{
       this.currentCard;
       this.communityCards = [];
 
+      this.timer = 0;
       this.pot = 0;
       this.round = 0;
       this.turn = 0;
@@ -38,11 +39,21 @@ class Table{
         this.gameInProgress = true;
         this.currentPlayers = this.playerUsernames();
         this.currentPlayer = this.currentPlayers[this.turn];
+        this.currentTurn(this.currentPlayer);
         console.log('It is ' + this.currentPlayer + " turn.")
       }
 
       else if(this.gameInProgress){ console.log('Cannot start round, game in progress.') };
     }
+
+    // currentTurn(){
+    //   setInterval(() => this.test(), 1000);
+    // }
+
+    // test(){
+    //   this.timer++;
+    //   console.log(this.timer + " second");
+    // }
 
     getCurrentTableState(userid){
       let player = this.players.find(item => item.userid === userid);

@@ -12,6 +12,12 @@ class DataBase{
                 name: 'Kathryn',
                 password: 'mypassword',
                 isChecked: false
+            },
+
+            {
+                name: 'Jake',
+                password: 'a',
+                isChecked: false
             }
         ]
     }
